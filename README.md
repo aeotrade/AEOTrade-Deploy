@@ -50,7 +50,7 @@
 
 ```bash
 # 下载部署包
-git clone
+git clone https://github.com/aeotrade/AEOTrade-Deploy.git
 
 # 查看目录结构
 .
