@@ -1,0 +1,78 @@
+services:
+  aeotrade-server-gateway:
+    image: hub.aeotrade.com/open-source/aeotrade-server-gateway:latest
+    container_name: aeotrade-server-gateway
+    restart: unless-stopped
+    environment:
+      - NACOS_URL=127.0.0.1
+      - SPRING_CLOUD_NACOS_DISCOVERY_IP=127.0.0.1
+    ports:
+      - "8077:8077"
+        
+  aeotrade-server-admin:
+    image: hub.aeotrade.com/open-source/aeotrade-server-admin:latest
+    container_name: aeotrade-server-admin
+    restart: unless-stopped
+    environment:
+      - NACOS_URL=127.0.0.1
+      - SPRING_CLOUD_NACOS_DISCOVERY_IP=127.0.0.1
+    ports:
+      - "8094:8094"
+    depends_on:
+      - aeotrade-server-gateway
+
+  aeotrade-server-mamber:
+    image: hub.aeotrade.com/open-source/aeotrade-server-mamber:latest
+    container_name: aeotrade-server-mamber
+    restart: unless-stopped
+    environment:
+      - NACOS_URL=127.0.0.1
+      - SPRING_CLOUD_NACOS_DISCOVERY_IP=127.0.0.1
+    ports:
+      - "8092:8092"
+    volumes:
+      - mamber-upload:/usr/share/upload
+    depends_on:
+      - aeotrade-server-gateway
+  
+  aeotrade-server-message:
+    image: hub.aeotrade.com/open-source/aeotrade-server-message:latest
+    container_name: aeotrade-server-message
+    restart: unless-stopped
+    environment:
+      - NACOS_URL=127.0.0.1
+      - SPRING_CLOUD_NACOS_DISCOVERY_IP=127.0.0.1
+    ports:
+      - "8087:8087"
+    depends_on:
+      - aeotrade-server-gateway
+ 
+  aeotrade-server-oauth:
+    image: hub.aeotrade.com/open-source/aeotrade-server-oauth:latest
+    container_name: aeotrade-server-oauth
+    restart: unless-stopped
+    environment:
+      - NACOS_URL=127.0.0.1
+      - SPRING_CLOUD_NACOS_DISCOVERY_IP=127.0.0.1
+    ports:
+      - "8080:8080"
+    depends_on:
+      - aeotrade-server-gateway
+
+  aeotrade-server-chain:
+    image: hub.aeotrade.com/open-source/aeotrade-server-chain:latest
+    container_name: aeotrade-server-chain
+    restart: unless-stopped
+    environment:
+      - NACOS_URL=127.0.0.1
+      - SPRING_CLOUD_NACOS_DISCOVERY_IP=127.0.0.1
+    volumes:
+      - server-chain-upload:/usr/share/upload
+    ports:
+      - "8059:8059"
+    depends_on:
+      - aeotrade-server-gateway
+
+volumes:
+  mamber-upload:
+  server-chain-upload:

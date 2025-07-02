@@ -1,0 +1,9 @@
+services:
+  connection_system:
+     image: hub.aeotrade.com/open-source/connection_system:latest
+     container_name: connection_system
+     restart: unless-stopped
+     ports:
+       - "8011:8011"
+     env_file:
+        - .env

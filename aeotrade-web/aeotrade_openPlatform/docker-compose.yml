@@ -1,0 +1,9 @@
+services:
+  aeotrade_openPlatform:
+    image: hub.aeotrade.com/open-source/aeotrade_openplatform:latest
+    container_name: aeotrade_openPlatform
+    restart: unless-stopped
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf
+    ports:
+      - "3002:80"

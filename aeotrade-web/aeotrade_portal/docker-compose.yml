@@ -1,0 +1,9 @@
+services:
+  aeotrade_portal:
+    image: hub.aeotrade.com/open-source/aeotrade_portal:latest
+    container_name: aeotrade_portal
+    restart: unless-stopped
+    extra_hosts:
+      - "backend:127.0.0.1"
+    ports:
+      - "3000:3000"

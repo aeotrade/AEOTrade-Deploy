@@ -1,0 +1,9 @@
+services:
+  aeochainexchange:
+    image: hub.aeotrade.com/open-source/aeochainexchange:latest
+    container_name: aeochainexchange
+    restart: unless-stopped
+    ports:
+      - 8082:8082
+    volumes:
+      - ./application.properties:/usr/share/aeochainexchange/application.properties:rw

@@ -1,0 +1,30 @@
+services:
+  nacos:
+    image: hub.aeotrade.com/open-source/nacos/nacos-server:2.0.0
+    container_name: nacos
+    ports:
+      - "0.0.0.0:8848:8848"
+      - "0.0.0.0:9848:9848"
+      - "0.0.0.0:9849:9849"
+    restart: always
+    environment:
+      - MYSQL_SERVICE_PORT=3306
+      - MYSQL_SERVICE_USER=nacos
+      - MYSQL_SERVICE_PASSWORD=nacos
+      - MYSQL_SERVICE_DB_NAME=nacos_config
+      - SPRING_DATASOURCE_PLATFORM=mysql
+      - MYSQL_SERVICE_HOST=192.168.0.106
+      - JVM_XMS=512m
+      - JVM_XMX=512m
+      - MODE=standalone
+    volumes:
+      - ./custom.properties:/home/nacos/init.d/custom.properties
+      - nacos-logs:/home/nacos/logs
+    working_dir: /home/nacos
+    ulimits:
+      nproc: 65535
+      nofile:
+        soft: 65535
+        hard: 65535
+volumes:
+  nacos-logs:

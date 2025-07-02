@@ -1,0 +1,101 @@
+services:
+  hmos_mysql:
+    image: hub.aeotrade.com/aeotrade/mysql:5.7.44
+    container_name: hmos_mysql
+    restart: unless-stopped
+    ports:
+      - "3306:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=sql2025
+      - LANG=C.UTF-8
+      - TZ=Asia/Shanghai
+    volumes:
+      - hmos_mysql-data:/var/lib/mysql
+      - hmos_mysql-conf:/etc/mysql/conf.d
+      - ./init/mysql_init.sql:/docker-entrypoint-initdb.d/mysql_init.sql
+
+  hmos_rabbitmq:
+    image: hub.aeotrade.com/aeotrade/rabbitmq:4.0-management
+    container_name: hmos_rabbitmq
+    restart: unless-stopped
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+      - "25672:25672"
+    environment:
+      - RABBITMQ_DEFAULT_USER=rabbit
+      - RABBITMQ_DEFAULT_PASS=
+      - LANG=C.UTF-8
+      - TZ=Asia/Shanghai
+    volumes:
+      - hmos_rabbitmq-data:/var/lib/rabbitmq
+  
+  hmos_mongodb:
+    image: hub.aeotrade.com/aeotrade/mongo:8.0.3
+    container_name: hmos_mongodb
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=aeotrade
+      - MONGO_INITDB_ROOT_PASSWORD=Hmtx2025
+      - LANG=C.UTF-8
+      - TZ=Asia/Shanghai
+    volumes:
+      - hmos_mongo-data:/data/db 
+      - hmos_mongo-logs:/var/log/mongodb
+    command: --auth
+  
+  hmos_redis:
+    image: hub.aeotrade.com/aeotrade/redis:8.0-M02
+    container_name: hmos_redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    environment:
+      - LANG=C.UTF-8
+      - TZ=Asia/Shanghai
+    volumes:
+      - hmos_redis-data:/data
+    working_dir: /data
+    command: redis-server --requirepass ''
+
+  hmos_pgsql:
+    image: hub.aeotrade.com/aeotrade/postgres:16
+    container_name: hmos_pgsql
+    restart: unless-stopped
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=
+      - LANG=C.UTF-8
+      - TZ=Asia/Shanghai
+    volumes:
+      - hmos_pgsql-data:/var/lib/postgresql/data
+      - ./init/pgsql_init.sql:/docker-entrypoint-initdb.d/pgsql_init.sql
+
+  connection_system_db:
+    image: hub.aeotrade.com/aeotrade/postgres:16
+    container_name: connection_system_db
+    restart: unless-stopped
+    ports:
+      - "54322:5432"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=
+      - LANG=C.UTF-8
+      - TZ=Asia/Shanghai
+    volumes:
+      - connection_system-data:/var/lib/postgresql/data
+      - ./init/connection_system_db_init.sql:/docker-entrypoint-initdb.d/connection_system_db_init.sql
+
+volumes:
+  hmos_mongo-data:
+  hmos_mongo-logs:
+  hmos_pgsql-data:
+  hmos_redis-data:
+  hmos_rabbitmq-data:
+  hmos_mysql-data:
+  hmos_mysql-conf:
+  connection_system-data:

@@ -1,0 +1,9 @@
+services:
+  aeochaincontract:
+    image: hub.aeotrade.com/open-source/aeochaincontract:latest
+    container_name: aeochaincontract
+    restart: unless-stopped
+    ports:
+      - 8081:8081
+    volumes:
+      - ./application.properties:/usr/share/aeochaincontract/application.properties:rw
